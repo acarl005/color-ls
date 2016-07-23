@@ -79,7 +79,7 @@ color-ls
     size          . ? sort by size                    . = false 
     time          . ? sort by time                    . = false 
     kind          . ? sort by kind                    . = false 
-    pretty        . ? pretty size and date            . = true         
+    pretty        . ? pretty size and date            . = false         
     stats         . ? show statistics                 . = false . - i
     recurse       . ? recurse into subdirs            . = false . - R
     find          . ? filter with a regexp                      . - F
@@ -133,7 +133,8 @@ colors =
     '_arrow':     fw(1)
     '_header':  [ bold+BW(2)+fg(3,2,0),  fw(4), bold+BW(2)+fg(5,5,0) ]  
     #
-    '_size':    { b: [fg(0,0,2)], kB: [fg(0,0,4), fg(0,0,2)], MB: [fg(1,1,5), fg(0,0,3)], TB: [fg(4,4,5), fg(2,2,5)] } 
+    '_size':    { b: [fg(0,0,2)], kB: [fg(0,0,4), fg(0,0,2)], MB: [fg(1,1,5), fg(0,0,3)], GB: [], TB: [fg(4,4,5), fg(2,2,5)] } 
+    '_size':    { b: fg(0,0,5), kB: fg(1,1,5), MB: fg(2,2,5), GB: fg(3,3,5), TB: fg(4,4,5) } 
     '_users':   { root:  fg(3,0,0), default: fg(1,0,1) }
     '_groups':  { wheel: fg(1,0,0), staff: fg(0,1,0), admin: fg(1,1,0), default: fg(1,0,1) }
     '_error':   [ bold+BG(5,0,0)+fg(5,5,0), bold+BG(5,0,0)+fg(5,5,5) ]
@@ -170,22 +171,30 @@ dirString  = (name, ext) ->
         
 sizeString = (stat) -> 
     if stat.size < 1000
-        colors['_size']['b'][0] + _s.lpad(stat.size, 10) + " "
+        if args.pretty
+            colors['_size']['b'] + _s.lpad(stat.size, 8) + " B "
+        else
+            colors['_size']['b'] + _s.lpad(stat.size, 10) + " "
     else if stat.size < 1000000
         if args.pretty 
-            colors['_size']['kB'][0] + _s.lpad((stat.size / 1000).toFixed(0), 7) + " " + colors['_size']['kB'][1] + "kB "
+            colors['_size']['kB'] + _s.lpad((stat.size / 1000).toFixed(0), 8) + "kB "
         else
-            colors['_size']['kB'][0] + _s.lpad(stat.size, 10) + " "
+            colors['_size']['kB'] + _s.lpad(stat.size, 10) + " "
     else if stat.size < 1000000000
         if args.pretty 
-            colors['_size']['MB'][0] + _s.lpad((stat.size / 1000000).toFixed(1), 7) + " " + colors['_size']['MB'][1] + "MB "
+            colors['_size']['MB'] + _s.lpad((stat.size / 1000000).toFixed(1), 8) + "MB "
         else
-            colors['_size']['MB'][0] + _s.lpad(stat.size, 10) + " "
+            colors['_size']['MB'] + _s.lpad(stat.size, 10) + " "
+    else if stat.size < 100000000000
+        if args.pretty
+            colors['_size']['GB'] + _s.lpad((stat.size / 1000000000).toFixed(1), 8) + "GB "
+        else
+            colors['_size']['GB'] + _s.lpad(stat.size, 10) + " "
     else 
         if args.pretty 
-            colors['_size']['TB'][0] + _s.lpad((stat.size / 1000000000).toFixed(3), 7) + " " + colors['_size']['TB'][1] + "TB "
+            colors['_size']['TB'] + _s.lpad((stat.size / 1000000000000).toFixed(3), 8) + "TB "
         else
-            colors['_size']['TB'][0] + _s.lpad(stat.size, 10) + " "
+            colors['_size']['TB'] + _s.lpad(stat.size, 10) + " "
     
 timeString = (stat) -> 
     t = moment(stat.mtime) 
@@ -211,19 +220,9 @@ groupName = (stat) ->
 ownerString = (stat, ownerColor, groupColor) ->
     own = ownerName(stat)
     grp = groupName(stat)
-    #ocl = colors['_users'][own]
-    #ocl = colors['_users']['default'] unless ocl
-    #gcl = colors['_groups'][grp]
-    #gcl = colors['_groups']['default'] unless gcl
     ownerColor + _s.rpad(own, stats.maxOwnerLength) + " " + groupColor + _s.rpad(grp, stats.maxGroupLength)
      
 rwxString = (stat, i, color) ->
-    #own = ownerName(stat)
-    #grp = groupName(stat)
-    #ocl = colors['_users'][own]
-    #ocl = colors['_users']['default'] unless ocl
-    #gcl = colors['_groups'][grp]
-    #gcl = colors['_groups']['default'] unless gcl
     mode = (stat.mode >> (i * 3))
     bold + BW(1) + color
     ((mode & 0b100) and 'r' or '-') + 
@@ -234,7 +233,7 @@ rightsString = (stat, ownerColor, groupColor) ->
     user = rwxString(stat, 2,) + " "
     group = rwxString(stat, 1,) + " "
     other = rwxString(stat, 0) + " "
-    BW(1) + " " + ownerColor + user + groupColor +  group + fw(10) + other + reset
+    BW(1) + " " + ownerColor + user + groupColor +  group + fw(15) + other + reset
      
 #  0000000   0000000   00000000   000000000
 # 000       000   000  000   000     000   
