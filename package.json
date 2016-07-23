@@ -12,6 +12,10 @@
     "type": "git",
     "url": "git://github.com/monsterkodi/color-ls"
   },
+  "scripts": {
+    "build": "coffee -o dest/ -c src/*.coffee",
+    "test": "npm run build && bin/color-ls -olr"
+  },
   "preferGlobal": true,
   "keywords": [
     "ls",
@@ -32,5 +36,9 @@
     "underscore.string": "^3.2.3",
     "userid": "^0.2.0",
     "karg": ">=0.3.1"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-coffeeify": "^0.1.8"
   }
 }

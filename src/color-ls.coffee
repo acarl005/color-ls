@@ -208,25 +208,33 @@ groupName = (stat) ->
     catch
         stat.gid    
     
-ownerString = (stat) ->
+ownerString = (stat, ownerColor, groupColor) ->
     own = ownerName(stat)
     grp = groupName(stat)
-    ocl = colors['_users'][own]
-    ocl = colors['_users']['default'] unless ocl
-    gcl = colors['_groups'][grp]
-    gcl = colors['_groups']['default'] unless gcl
-    ocl + _s.rpad(own, stats.maxOwnerLength) + " " + gcl + _s.rpad(grp, stats.maxGroupLength)
+    #ocl = colors['_users'][own]
+    #ocl = colors['_users']['default'] unless ocl
+    #gcl = colors['_groups'][grp]
+    #gcl = colors['_groups']['default'] unless gcl
+    ownerColor + _s.rpad(own, stats.maxOwnerLength) + " " + groupColor + _s.rpad(grp, stats.maxGroupLength)
      
-rwxString = (mode, i) ->
-    (((mode >> (i*3)) & 0b100) and colors['_rights']['r+'] + ' r' or colors['_rights']['r-'] + '  ') + 
-    (((mode >> (i*3)) & 0b010) and colors['_rights']['w+'] + ' w' or colors['_rights']['w-'] + '  ') +
-    (((mode >> (i*3)) & 0b001) and colors['_rights']['x+'] + ' x' or colors['_rights']['x-'] + '  ')
+rwxString = (stat, i, color) ->
+    #own = ownerName(stat)
+    #grp = groupName(stat)
+    #ocl = colors['_users'][own]
+    #ocl = colors['_users']['default'] unless ocl
+    #gcl = colors['_groups'][grp]
+    #gcl = colors['_groups']['default'] unless gcl
+    mode = (stat.mode >> (i * 3))
+    bold + BW(1) + color
+    ((mode & 0b100) and 'r' or '-') + 
+    ((mode & 0b010) and 'w' or '-') +
+    ((mode & 0b001) and 'x' or '-')
     
-rightsString = (stat) ->
-    ur = rwxString(stat.mode, 2) + " "
-    gr = rwxString(stat.mode, 1) + " "
-    ro = rwxString(stat.mode, 0) + " "
-    ur + gr + ro + reset
+rightsString = (stat, ownerColor, groupColor) ->
+    user = rwxString(stat, 2,) + " "
+    group = rwxString(stat, 1,) + " "
+    other = rwxString(stat, 0) + " "
+    BW(1) + " " + ownerColor + user + groupColor +  group + fw(10) + other + reset
      
 #  0000000   0000000   00000000   000000000
 # 000       000   000  000   000     000   
@@ -322,12 +330,18 @@ listFiles = (p, files) ->
             ext = name.substr(1) + path.extname file
             name = ''
         if name.length or args.all
+            own = ownerName(stat)
+            grp = groupName(stat)
+            ownerColor = colors['_users'][own]
+            ownerColor = colors['_users']['default'] unless ownerColor
+            groupColor = colors['_groups'][grp]
+            groupColor = colors['_groups']['default'] unless groupColor
             s = " " 
             if args.rights
-                s += rightsString stat
+                s += rightsString stat, ownerColor, groupColor
                 s += " "                
             if args.owner
-                s += ownerString stat
+                s += ownerString stat, ownerColor, groupColor
                 s += " "
             if args.bytes
                 s += sizeString stat
