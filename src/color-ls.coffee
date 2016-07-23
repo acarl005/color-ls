@@ -47,6 +47,7 @@ bold   = '\x1b[1m'
 reset  = ansi.reset
 fg     = ansi.fg.getRgb
 BG     = ansi.bg.getRgb
+fgc    = (i) -> ansi.fg.codes[i]
 fw     = (i) -> ansi.fg.grayscale[i]
 BW     = (i) -> ansi.bg.grayscale[i]
 
@@ -81,6 +82,7 @@ color-ls
     kind          . ? sort by kind                    . = false 
     pretty        . ? pretty size and date            . = false         
     stats         . ? show statistics                 . = false . - i
+    icons         . ? show icons before folders       . = false . - I
     recurse       . ? recurse into subdirs            . = false . - R
     find          . ? filter with a regexp                      . - F
     alphabetical  . ! don't group dirs before files   . = false . - A
@@ -104,29 +106,26 @@ args.paths = ['.'] unless args.paths?.length > 0
 #  0000000   0000000   0000000   0000000   000   000  0000000 
 
 colors = 
-    'coffee':   [ bold+fg(4,4,0),  fg(1,1,0), fg(1,1,0) ] 
-    'py':       [ bold+fg(0,2,0),  fg(0,1,0), fg(0,1,0) ]
-    'rb':       [ bold+fg(4,0,0),  fg(1,0,0), fg(1,0,0) ] 
-    'json':     [ bold+fg(4,0,4),  fg(1,0,1), fg(1,0,1) ] 
-    'cson':     [ bold+fg(4,0,4),  fg(1,0,1), fg(1,0,1) ] 
-    'noon':     [ bold+fg(4,4,0),  fg(1,1,0), fg(1,1,0) ] 
-    'plist':    [ bold+fg(4,0,4),  fg(1,0,1), fg(1,0,1) ] 
-    'js':       [ bold+fg(5,0,5),  fg(1,0,1), fg(1,0,1) ] 
-    'cpp':      [ bold+fg(5,4,0),  fw(1),     fg(1,1,0) ] 
-    'h':        [      fg(3,1,0),  fw(1),     fg(1,1,0) ] 
-    'pyc':      [      fw(5),      fw(1),     fw(1) ]
-    'log':      [      fw(5),      fw(1),     fw(1) ]
-    'log':      [      fw(5),      fw(1),     fw(1) ]
-    'txt':      [      fw(20),     fw(1),     fw(2) ]
-    'md':       [ bold+fw(20),     fw(1),     fw(2) ]
-    'markdown': [ bold+fw(20),     fw(1),     fw(2) ]
-    'sh':       [ bold+fg(5,1,0),  fg(1,0,0), fg(1,0,0) ] 
-    'png':      [ bold+fg(5,0,0),  fg(1,0,0), fg(1,0,0) ] 
-    'jpg':      [ bold+fg(0,3,0),  fg(0,1,0), fg(0,1,0) ] 
-    'pxm':      [ bold+fg(1,1,5),  fg(0,0,1), fg(0,0,2) ] 
-    'tiff':     [ bold+fg(1,1,5),  fg(0,0,1), fg(0,0,2) ] 
+    'coffee':   [ bold+fgc(136),  fgc(130) ] 
+    'js':       [ bold+fg(4,4,0), fg(2,2,0) ] 
+    'json':     [ bold+fg(4,4,0), fg(2,2,0) ] 
+    'cson':     [ bold+fgc(136),  fgc(130) ] 
+    'plist':    [ bold+fg(4,0,4), fg(1,0,1) ] 
+    'cpp':      [ bold+fg(5,4,0), fg(1,1,0) ] 
+    'h':        [      fg(3,1,0), fg(1,1,0) ] 
+    'py':       [ bold+fg(0,3,0), fg(0,1,0) ]
+    'pyc':      [      fw(5),     fw(3) ]
+    'rb':       [ bold+fg(4,1,1), fg(3,0,0) ] 
+    'log':      [      fw(8),     fw(5) ]
+    'md':       [ bold+fw(20),    fw(2) ]
+    'markdown': [ bold+fw(20),    fw(2) ]
+    'sh':       [ bold+fg(5,1,0), fg(1,0,0) ] 
+    'png':      [ bold+fg(5,0,0), fg(1,0,0) ] 
+    'jpg':      [ bold+fg(0,3,0), fg(0,1,0) ] 
+    'pxm':      [ bold+fg(1,1,5), fg(0,0,2) ] 
+    'tiff':     [ bold+fg(1,1,5), fg(0,0,2) ] 
     #
-    '_default': [      fw(15),     fw(1),     fw(6) ]
+    '_default': [      fw(23),    fw(12) ]
     '_dir':     [ bold+BG(0,0,2)+fw(23), fg(1,1,5), fg(2,2,5) ]
     '_.dir':    [ bold+BG(0,0,1)+fw(23), bold+BG(0,0,1)+fg(1,1,5), bold+BG(0,0,1)+fg(2,2,5) ]
     '_link':    { 'arrow': fg(1,0,1), 'path': fg(4,0,4), 'broken': BG(5,0,0)+fg(5,5,0) }
@@ -161,49 +160,49 @@ catch
 log_error = () -> 
     log " " + colors['_error'][0] + " " + bold + arguments[0] + (arguments.length > 1 and (colors['_error'][1] + [].slice.call(arguments).slice(1).join(' ')) or '') + " " + reset    
     
-linkString = (file)      -> reset + fw(1) + colors['_link']['arrow'] + " ► " + colors['_link'][(file in stats.brokenLinks) and 'broken' or 'path'] + fs.readlinkSync(file)
+linkString = (file) -> reset + colors['_link']['arrow'] + " ► " + colors['_link'][(file in stats.brokenLinks) and 'broken' or 'path'] + fs.readlinkSync(file)
 nameString = (name, ext) -> " " + colors[colors[ext]? and ext or '_default'][0] + name + reset
-dotString  = (      ext) -> colors[colors[ext]? and ext or '_default'][1] + "." + reset
-extString  = (      ext) -> dotString(ext) + colors[colors[ext]? and ext or '_default'][2] + ext + reset
+extString  = (ext) -> colors[colors[ext]? and ext or '_default'][1] + '.' + ext + reset
 dirString  = (name, ext) -> 
     c = name and '_dir' or '_.dir'
+    name = '📂 ' + name if args.icons
     colors[c][0] + (name and (" " + name) or "") + (if ext then colors[c][1] + '.' + colors[c][2] + ext else "") + " "
         
 sizeString = (stat) -> 
     if stat.size < 1000
         if args.pretty
-            colors['_size']['b'] + _s.lpad(stat.size, 8) + " B "
+            colors['_size']['b'] + _s.lpad(stat.size, 7) + " B "
         else
             colors['_size']['b'] + _s.lpad(stat.size, 10) + " "
     else if stat.size < 1000000
         if args.pretty 
-            colors['_size']['kB'] + _s.lpad((stat.size / 1000).toFixed(0), 8) + "kB "
+            colors['_size']['kB'] + _s.lpad((stat.size / 1000).toFixed(0), 7) + "kB "
         else
             colors['_size']['kB'] + _s.lpad(stat.size, 10) + " "
     else if stat.size < 1000000000
         if args.pretty 
-            colors['_size']['MB'] + _s.lpad((stat.size / 1000000).toFixed(1), 8) + "MB "
+            colors['_size']['MB'] + _s.lpad((stat.size / 1000000).toFixed(1), 7) + "MB "
         else
             colors['_size']['MB'] + _s.lpad(stat.size, 10) + " "
     else if stat.size < 100000000000
         if args.pretty
-            colors['_size']['GB'] + _s.lpad((stat.size / 1000000000).toFixed(1), 8) + "GB "
+            colors['_size']['GB'] + _s.lpad((stat.size / 1000000000).toFixed(1), 7) + "GB "
         else
             colors['_size']['GB'] + _s.lpad(stat.size, 10) + " "
     else 
         if args.pretty 
-            colors['_size']['TB'] + _s.lpad((stat.size / 1000000000000).toFixed(3), 8) + "TB "
+            colors['_size']['TB'] + _s.lpad((stat.size / 1000000000000).toFixed(3), 7) + "TB "
         else
             colors['_size']['TB'] + _s.lpad(stat.size, 10) + " "
     
 timeString = (stat) -> 
     t = moment(stat.mtime) 
-    fw(16) + (if args.pretty then _s.lpad(t.format("D"),2) else t.format("DD")) + fw(7)+'.' + 
-    (if args.pretty then fw(14) + t.format("MMM") + fw(1)+"'" else fw(14) + t.format("MM") + fw(1)+"'") +
-    fw( 4) + t.format("YY") + " " +
-    fw(16) + t.format("HH") + col = fw(7)+':' + 
-    fw(14) + t.format("mm") + col = fw(1)+':' +
-    fw( 4) + t.format("ss") + " "
+    fw(20) + (if args.pretty then _s.lpad(t.format("D"),2) else t.format("DD")) + fw(7) + '.' + 
+    (if args.pretty then fw(15) + t.format("MMM") + fw(7)+"'" else fw(15) + t.format("MM") + fw(7)+"'") +
+    fw(10) + t.format("YY") + " " +
+    fw(20) + t.format("HH") + col = fw(7)+':' + 
+    fw(15) + t.format("mm") + col = fw(7)+':' +
+    fw(10) + t.format("ss") + " "
     
 ownerName = (stat) -> 
     try

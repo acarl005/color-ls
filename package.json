@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "coffee -o dest/ -c src/*.coffee",
-    "test": "npm run build && bin/color-ls -olrp"
+    "test": "npm run build && bin/color-ls -olrpai"
   },
   "preferGlobal": true,
   "keywords": [
