@@ -11,7 +11,7 @@ This is a fork of [monsterkodi/color-ls](https://github.com/monsterkodi/color-ls
 
 ## Getting started
 **A terminal with 256-color is required.** Intended for dark backgrounds.
-```
+```sh
 $ [sudo] npm install -g ls-color
 # I recommend aliasing ls-color to something less verbose
 $ alias ll="ls-color -aliI"
