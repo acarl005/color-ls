@@ -18,7 +18,7 @@ $ alias ll="ls-color -aliI"
 ```
 
 ## Usage
-See the full options. The `--pretty` options is enabled by default.
+See the full options. The `--pretty` option is enabled by default.
 ```
 ls-color -h
 ```
@@ -27,5 +27,5 @@ ls-color -h
 
 ### Recursion
 
-![example02](./img/example02.png)
+![example02](./img/recursion.png)
 
