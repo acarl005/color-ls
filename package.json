@@ -2,19 +2,19 @@
   "name": "ls-color",
   "version": "1.0.0",
   "description": "More colorful alternative to the ls command.",
-  "main": "color-ls.coffee",
+  "main": "ls-color.coffee",
   "author": "Andrew Carlson <acarl005@g.ucla.edu>",
   "license": "MIT",
   "bin": {
-    "color-ls": "./bin/color-ls"
+    "color-ls": "./bin/ls-color"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/acarl005/ls-color"
+    "url": "git://github.com/acarl005/color-ls"
   },
   "scripts": {
     "build": "coffee -o dest/ -c src/*.coffee",
-    "test": "npm run build && bin/color-ls -olraiI"
+    "test": "npm run build && bin/ls-color -laiI"
   },
   "preferGlobal": true,
   "keywords": [

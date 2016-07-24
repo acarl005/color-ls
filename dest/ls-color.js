@@ -78,7 +78,7 @@
     brokenLinks: []
   };
 
-  args = require('karg')("color-ls\n    paths         . ? the file(s) and/or folder(s) to display . **\n    bytes         . ? include size                    . = false \n    mdate         . ? include modification date       . = false              \n    long          . ? include size, date, owner, rights . = false          \n    owner         . ? include owner and group         . = false            \n    rights        . ? include rights                  . = false   \n    all           . ? show dot files                  . = false\n    dirs          . ? show only dirs                  . = false   \n    files         . ? show only files                 . = false    \n    size          . ? sort by size                    . = false \n    time          . ? sort by time                    . = false \n    kind          . ? sort by kind                    . = false \n    pretty        . ? pretty size and date            . = true\n    stats         . ? show statistics                 . = false . - i\n    icons         . ? show icons before folders       . = false . - I\n    recurse       . ? recurse into subdirs            . = false . - R\n    find          . ? filter with a regexp                      . - F\n    alphabetical  . ! don't group dirs before files   . = false . - A\n    \nversion      " + (require(__dirname + "/../package.json").version) + "    ");
+  args = require('karg')("color-ls\n    paths         . ? the file(s) and/or folder(s) to display . **\n    bytes         . ? include size                    . = false \n    mdate         . ? include modification date       . = false              \n    owner         . ? include owner and group         . = false            \n    rights        . ? include rights                  . = false   \n    long          . ? include size, date, owner, rights . = false          \n    all           . ? show dot files                  . = false\n    dirs          . ? show only dirs                  . = false   \n    files         . ? show only files                 . = false    \n    size          . ? sort by size                    . = false \n    time          . ? sort by time                    . = false \n    kind          . ? sort by kind                    . = false \n    pretty        . ? pretty size and date            . = true\n    stats         . ? show statistics                 . = false . - i\n    icons         . ? show icons before folders       . = false . - I\n    recurse       . ? recurse into subdirs            . = false . - R\n    find          . ? filter with a regexp                      . - F\n    alphabetical  . ! don't group dirs before files   . = false . - A\n    \nversion      " + (require(__dirname + "/../package.json").version) + "    ");
 
   if (args.size) {
     args.files = true;
@@ -266,7 +266,7 @@
   rwxString = function(stat, i, color) {
     var mode;
     mode = stat.mode >> (i * 3);
-    bold + BW(1) + color;
+    bold + color;
     return ((mode & 0x4) && 'r' || '-') + ((mode & 0x2) && 'w' || '-') + ((mode & 0x1) && 'x' || '-');
   };
 
@@ -275,7 +275,7 @@
     user = rwxString(stat, 2) + " ";
     group = rwxString(stat, 1) + " ";
     other = rwxString(stat, 0) + " ";
-    return BW(1) + " " + ownerColor + user + groupColor + group + fw(15) + other + reset;
+    return BW(2) + " " + ownerColor + user + groupColor + group + fw(15) + other + reset;
   };
 
   sort = function(list, stats, exts) {

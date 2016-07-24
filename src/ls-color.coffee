@@ -71,9 +71,9 @@ color-ls
     paths         . ? the file(s) and/or folder(s) to display . **
     bytes         . ? include size                    . = false 
     mdate         . ? include modification date       . = false              
-    long          . ? include size, date, owner, rights . = false          
     owner         . ? include owner and group         . = false            
     rights        . ? include rights                  . = false   
+    long          . ? include size, date, owner, rights . = false          
     all           . ? show dot files                  . = false
     dirs          . ? show only dirs                  . = false   
     files         . ? show only files                 . = false    
@@ -236,7 +236,7 @@ ownerString = (stat, ownerColor, groupColor) ->
      
 rwxString = (stat, i, color) ->
     mode = (stat.mode >> (i * 3))
-    bold + BW(1) + color
+    bold + color
     ((mode & 0b100) and 'r' or '-') + 
     ((mode & 0b010) and 'w' or '-') +
     ((mode & 0b001) and 'x' or '-')
@@ -245,7 +245,7 @@ rightsString = (stat, ownerColor, groupColor) ->
     user = rwxString(stat, 2,) + " "
     group = rwxString(stat, 1,) + " "
     other = rwxString(stat, 0) + " "
-    BW(1) + " " + ownerColor + user + groupColor +  group + fw(15) + other + reset
+    BW(2) + " " + ownerColor + user + groupColor +  group + fw(15) + other + reset
      
 #  0000000   0000000   00000000   000000000
 # 000       000   000  000   000     000   

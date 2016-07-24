@@ -1,30 +1,31 @@
+# ls-color
 
-![icon](./img/icon.png)
+#### A colorful alternative to the `ls` command.
+List the contents of your folders in beautiful, semantic colors.
+```
+$ ls-color -aliI
+```
+![example01](./img/main.png)
 
-![example01](./img/example01.png)
+This is a fork of [monsterkodi/color-ls](https://github.com/monsterkodi/color-ls).
 
-### usage
+## Getting started
+**A terminal with 256-color is required.** Intended for dark backgrounds.
+```
+$ [sudo] npm install -g ls-color
+# I recommend aliasing ls-color to something less verbose
+$ alias ll="ls-color -aliI"
+```
 
-![usage](./img/usage.png)
+## Usage
+See the full options. The `--pretty` options is enabled by default.
+```
+ls-color -h
+```
 
-### recursion
+![usage](./img/help.png)
+
+### Recursion
 
 ![example02](./img/example02.png)
 
-### find files
-
-![example02](./img/example03.png)
-
-### install
-
-```shell
-npm install -g color-ls
-```
-
-### notes
-
-* needs a terminal with 256 colors
-* currently optimized for dark backgrounds only
-* only a small set of filetypes colorized so far
-* only tested on Mac OS X and Linux
-* call your doctor if your eyes start bleeding :)
