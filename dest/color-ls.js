@@ -78,7 +78,7 @@
     brokenLinks: []
   };
 
-  args = require('karg')("color-ls\n    paths         . ? the file(s) and/or folder(s) to display . **\n    bytes         . ? include size                    . = false \n    mdate         . ? include modification date       . = false              \n    long          . ? include size and date           . = false          \n    owner         . ? include owner and group         . = false            \n    rights        . ? include rights                  . = false   \n    all           . ? show dot files                  . = false\n    dirs          . ? show only dirs                  . = false   \n    files         . ? show only files                 . = false    \n    size          . ? sort by size                    . = false \n    time          . ? sort by time                    . = false \n    kind          . ? sort by kind                    . = false \n    pretty        . ? pretty size and date            . = false         \n    stats         . ? show statistics                 . = false . - i\n    icons         . ? show icons before folders       . = false . - I\n    recurse       . ? recurse into subdirs            . = false . - R\n    find          . ? filter with a regexp                      . - F\n    alphabetical  . ! don't group dirs before files   . = false . - A\n    \nversion      " + (require(__dirname + "/../package.json").version) + "    ");
+  args = require('karg')("color-ls\n    paths         . ? the file(s) and/or folder(s) to display . **\n    bytes         . ? include size                    . = false \n    mdate         . ? include modification date       . = false              \n    long          . ? include size, date, owner, rights . = false          \n    owner         . ? include owner and group         . = false            \n    rights        . ? include rights                  . = false   \n    all           . ? show dot files                  . = false\n    dirs          . ? show only dirs                  . = false   \n    files         . ? show only files                 . = false    \n    size          . ? sort by size                    . = false \n    time          . ? sort by time                    . = false \n    kind          . ? sort by kind                    . = false \n    pretty        . ? pretty size and date            . = false         \n    stats         . ? show statistics                 . = false . - i\n    icons         . ? show icons before folders       . = false . - I\n    recurse       . ? recurse into subdirs            . = false . - R\n    find          . ? filter with a regexp                      . - F\n    alphabetical  . ! don't group dirs before files   . = false . - A\n    \nversion      " + (require(__dirname + "/../package.json").version) + "    ");
 
   if (args.size) {
     args.files = true;
@@ -87,6 +87,8 @@
   if (args.long) {
     args.bytes = true;
     args.mdate = true;
+    args.owner = true;
+    args.rights = true;
   }
 
   if (!(((ref = args.paths) != null ? ref.length : void 0) > 0)) {
@@ -195,35 +197,37 @@
   };
 
   sizeString = function(stat) {
+    var sizes;
+    sizes = colors['_size'];
     if (stat.size < 1000) {
       if (args.pretty) {
-        return colors['_size']['b'] + _s.lpad(stat.size, 7) + " B ";
+        return sizes['b'] + _s.lpad(stat.size, 7) + " B ";
       } else {
-        return colors['_size']['b'] + _s.lpad(stat.size, 10) + " ";
+        return sizes['b'] + _s.lpad(stat.size, 10) + " ";
       }
     } else if (stat.size < 1000000) {
       if (args.pretty) {
-        return colors['_size']['kB'] + _s.lpad((stat.size / 1000).toFixed(0), 7) + "kB ";
+        return sizes['kB'] + _s.lpad((stat.size / 1000).toFixed(0), 7) + "kB ";
       } else {
-        return colors['_size']['kB'] + _s.lpad(stat.size, 10) + " ";
+        return sizes['kB'] + _s.lpad(stat.size, 10) + " ";
       }
     } else if (stat.size < 1000000000) {
       if (args.pretty) {
-        return colors['_size']['MB'] + _s.lpad((stat.size / 1000000).toFixed(1), 7) + "MB ";
+        return sizes['MB'] + _s.lpad((stat.size / 1000000).toFixed(1), 7) + "MB ";
       } else {
-        return colors['_size']['MB'] + _s.lpad(stat.size, 10) + " ";
+        return sizes['MB'] + _s.lpad(stat.size, 10) + " ";
       }
     } else if (stat.size < 100000000000) {
       if (args.pretty) {
-        return colors['_size']['GB'] + _s.lpad((stat.size / 1000000000).toFixed(1), 7) + "GB ";
+        return sizes['GB'] + _s.lpad((stat.size / 1000000000).toFixed(1), 7) + "GB ";
       } else {
-        return colors['_size']['GB'] + _s.lpad(stat.size, 10) + " ";
+        return sizes['GB'] + _s.lpad(stat.size, 10) + " ";
       }
     } else {
       if (args.pretty) {
-        return colors['_size']['TB'] + _s.lpad((stat.size / 1000000000000).toFixed(3), 7) + "TB ";
+        return sizes['TB'] + _s.lpad((stat.size / 1000000000000).toFixed(3), 7) + "TB ";
       } else {
-        return colors['_size']['TB'] + _s.lpad(stat.size, 10) + " ";
+        return sizes['TB'] + _s.lpad(stat.size, 10) + " ";
       }
     }
   };

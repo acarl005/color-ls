@@ -71,7 +71,7 @@ color-ls
     paths         . ? the file(s) and/or folder(s) to display . **
     bytes         . ? include size                    . = false 
     mdate         . ? include modification date       . = false              
-    long          . ? include size and date           . = false          
+    long          . ? include size, date, owner, rights . = false          
     owner         . ? include owner and group         . = false            
     rights        . ? include rights                  . = false   
     all           . ? show dot files                  . = false
@@ -96,6 +96,8 @@ if args.size
 if args.long
     args.bytes = true
     args.mdate = true
+    args.owner = true
+    args.rights = true
 
 args.paths = ['.'] unless args.paths?.length > 0
 
@@ -179,31 +181,32 @@ dirString = (name, ext) ->
     colors[c][0] + (name and (" " + name) or "") + (if ext then colors[c][1] + '.' + colors[c][2] + ext else "") + " "
         
 sizeString = (stat) -> 
+    sizes = colors['_size']
     if stat.size < 1000
         if args.pretty
-            colors['_size']['b'] + _s.lpad(stat.size, 7) + " B "
+            sizes['b'] + _s.lpad(stat.size, 7) + " B "
         else
-            colors['_size']['b'] + _s.lpad(stat.size, 10) + " "
+            sizes['b'] + _s.lpad(stat.size, 10) + " "
     else if stat.size < 1000000
         if args.pretty 
-            colors['_size']['kB'] + _s.lpad((stat.size / 1000).toFixed(0), 7) + "kB "
+            sizes['kB'] + _s.lpad((stat.size / 1000).toFixed(0), 7) + "kB "
         else
-            colors['_size']['kB'] + _s.lpad(stat.size, 10) + " "
+            sizes['kB'] + _s.lpad(stat.size, 10) + " "
     else if stat.size < 1000000000
         if args.pretty 
-            colors['_size']['MB'] + _s.lpad((stat.size / 1000000).toFixed(1), 7) + "MB "
+            sizes['MB'] + _s.lpad((stat.size / 1000000).toFixed(1), 7) + "MB "
         else
-            colors['_size']['MB'] + _s.lpad(stat.size, 10) + " "
+            sizes['MB'] + _s.lpad(stat.size, 10) + " "
     else if stat.size < 100000000000
         if args.pretty
-            colors['_size']['GB'] + _s.lpad((stat.size / 1000000000).toFixed(1), 7) + "GB "
+            sizes['GB'] + _s.lpad((stat.size / 1000000000).toFixed(1), 7) + "GB "
         else
-            colors['_size']['GB'] + _s.lpad(stat.size, 10) + " "
+            sizes['GB'] + _s.lpad(stat.size, 10) + " "
     else 
         if args.pretty 
-            colors['_size']['TB'] + _s.lpad((stat.size / 1000000000000).toFixed(3), 7) + "TB "
+            sizes['TB'] + _s.lpad((stat.size / 1000000000000).toFixed(3), 7) + "TB "
         else
-            colors['_size']['TB'] + _s.lpad(stat.size, 10) + " "
+            sizes['TB'] + _s.lpad(stat.size, 10) + " "
     
 timeString = (stat) -> 
     t = moment(stat.mtime) 
