@@ -115,8 +115,6 @@
     'markdown': [fgc(87), fgc(73)],
     'html': [fgc(87), fgc(73)],
     'css': [fgc(219), fgc(207)],
-    'pxm': [bold + fg(1, 1, 5), fg(0, 0, 2)],
-    'tiff': [bold + fg(1, 1, 5), fg(0, 0, 2)],
     'tar': [fg(5, 0, 0), fg(3, 0, 0)],
     'gz': [fg(5, 0, 0), fg(3, 0, 0)],
     'zip': [fg(5, 0, 0), fg(3, 0, 0)],
@@ -158,7 +156,7 @@
     '_error': [bold + BG(5, 0, 0) + fg(5, 5, 0), bold + BG(5, 0, 0) + fg(5, 5, 5)]
   };
 
-  mediaTypes = new Set(['png', 'gif', 'jpg', 'jpeg', 'ico', 'svg', 'webp', 'mp3', 'm4a', 'wav', 'webm', 'avi', 'wmv']);
+  mediaTypes = new Set(['png', 'gif', 'jpg', 'jpeg', 'ico', 'svg', 'webp', 'tiff', 'pxm', 'mp3', 'm4a', 'wav', 'webm', 'avi', 'wmv']);
 
   try {
     username = require('userid').username(process.getuid());
