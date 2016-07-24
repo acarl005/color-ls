@@ -1,16 +1,16 @@
 {
-  "name": "color-ls",
-  "version": "1.1.2",
-  "description": "lists files, but more colorful than ls",
+  "name": "ls-color",
+  "version": "1.0.0",
+  "description": "More colorful alternative to the ls command.",
   "main": "color-ls.coffee",
-  "author": "monsterkodi",
-  "license": "Unlicense",
+  "author": "Andrew Carlson <acarl005@g.ucla.edu>",
+  "license": "MIT",
   "bin": {
     "color-ls": "./bin/color-ls"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/monsterkodi/color-ls"
+    "url": "git://github.com/acarl005/ls-color"
   },
   "scripts": {
     "build": "coffee -o dest/ -c src/*.coffee",
@@ -23,7 +23,7 @@
     "list",
     "files",
     "commandline",
-    "coffeescript",
+    "pretty",
     "ansi",
     "color",
     "colors"
@@ -36,9 +36,5 @@
     "underscore.string": "^3.2.3",
     "userid": "^0.2.0",
     "karg": ">=0.3.1"
-  },
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-coffeeify": "^0.1.8"
   }
 }
