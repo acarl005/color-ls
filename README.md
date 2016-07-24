@@ -27,5 +27,5 @@ ls-color -h
 
 ### Recursion
 
-![example02](./img/recursion.png)
+![example02](./img/recursive.png)
 
