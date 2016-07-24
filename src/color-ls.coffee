@@ -110,20 +110,26 @@ colors =
     'js':       [ bold+fg(4,4,0), fg(2,2,0) ] 
     'json':     [ bold+fg(4,4,0), fg(2,2,0) ] 
     'cson':     [ bold+fgc(136),  fgc(130) ] 
-    'plist':    [ bold+fg(4,0,4), fg(1,0,1) ] 
-    'cpp':      [ bold+fg(5,4,0), fg(1,1,0) ] 
-    'h':        [      fg(3,1,0), fg(1,1,0) ] 
+    'jsx':      [ bold+fgc(14),   fgc(6) ]
+    'plist':    [ bold+fg(4,0,4), fg(2,0,2) ] 
+    'sh':       [ bold+fg(4,0,4), fg(2,0,2) ] 
+    'bash':     [ bold+fg(4,0,4), fg(2,0,2) ] 
+    'cpp':      [ bold+fg(4,0,4), fg(2,0,2) ] 
+    'h':        [ bold+fg(4,0,4), fg(2,0,2) ] 
     'py':       [ bold+fg(0,3,0), fg(0,1,0) ]
-    'pyc':      [      fw(5),     fw(3) ]
-    'rb':       [ bold+fg(4,1,1), fg(3,0,0) ] 
+    'pyc':      [      fw(8),     fw(5) ]
+    'rb':       [ bold+fg(5,1,0), fg(3,0,0) ] 
     'log':      [      fw(8),     fw(5) ]
-    'md':       [ bold+fw(20),    fw(2) ]
-    'markdown': [ bold+fw(20),    fw(2) ]
-    'sh':       [ bold+fg(5,1,0), fg(1,0,0) ] 
-    'png':      [ bold+fg(5,0,0), fg(1,0,0) ] 
-    'jpg':      [ bold+fg(0,3,0), fg(0,1,0) ] 
+    'swp':      [      fw(8),     fw(5) ]
+    'md':       [      fgc(87),   fgc(73) ]
+    'markdown': [      fgc(87),   fgc(73) ]
+    'html':     [      fgc(87),   fgc(73) ]
+    'css':      [      fgc(219),  fgc(207) ]
     'pxm':      [ bold+fg(1,1,5), fg(0,0,2) ] 
     'tiff':     [ bold+fg(1,1,5), fg(0,0,2) ] 
+    'tar':      [      fg(5,0,0), fg(3,0,0) ] 
+    'gz':       [      fg(5,0,0), fg(3,0,0) ] 
+    'zip':      [      fg(5,0,0), fg(3,0,0) ] 
     #
     '_default': [      fw(23),    fw(12) ]
     '_dir':     [ bold+BG(0,0,2)+fw(23), fg(1,1,5), fg(2,2,5) ]
@@ -131,19 +137,15 @@ colors =
     '_link':    { 'arrow': fg(1,0,1), 'path': fg(4,0,4), 'broken': BG(5,0,0)+fg(5,5,0) }
     '_arrow':     fw(1)
     '_header':  [ bold+BW(2)+fg(3,2,0),  fw(4), bold+BW(2)+fg(5,5,0) ]  
+    '_media':   [      fgc(141),  fgc(54) ] 
     #
     '_size':    { b: [fg(0,0,2)], kB: [fg(0,0,4), fg(0,0,2)], MB: [fg(1,1,5), fg(0,0,3)], GB: [], TB: [fg(4,4,5), fg(2,2,5)] } 
     '_size':    { b: fg(0,0,5), kB: fg(1,1,5), MB: fg(2,2,5), GB: fg(3,3,5), TB: fg(4,4,5) } 
-    '_users':   { root:  fg(3,0,0), default: fg(1,0,1) }
-    '_groups':  { wheel: fg(1,0,0), staff: fg(0,1,0), admin: fg(1,1,0), default: fg(1,0,1) }
+    '_users':   { root:  fg(5,0,2), default: fg(0,3,3) }
+    '_groups':  { wheel: fg(3,0,0), staff: fg(0,2,0), admin: fg(2,2,0), default: fg(2,0,2) }
     '_error':   [ bold+BG(5,0,0)+fg(5,5,0), bold+BG(5,0,0)+fg(5,5,5) ]
-    '_rights':  
-                  'r+': bold+BW(1)+fg(1,1,1)
-                  'r-': reset+BW(1) 
-                  'w+': bold+BW(1)+fg(2,2,5)
-                  'w-': reset+BW(1)
-                  'x+': bold+BW(1)+fg(5,0,0)
-                  'x-': reset+BW(1)
+
+mediaTypes = new Set ['png', 'gif', 'jpg', 'jpeg', 'ico', 'svg', 'webp', 'mp3', 'm4a', 'wav', 'webm', 'avi', 'wmv']
 
 try
     username = require('userid').username(process.getuid())
@@ -160,10 +162,18 @@ catch
 log_error = () -> 
     log " " + colors['_error'][0] + " " + bold + arguments[0] + (arguments.length > 1 and (colors['_error'][1] + [].slice.call(arguments).slice(1).join(' ')) or '') + " " + reset    
     
-linkString = (file) -> reset + colors['_link']['arrow'] + " ► " + colors['_link'][(file in stats.brokenLinks) and 'broken' or 'path'] + fs.readlinkSync(file)
-nameString = (name, ext) -> " " + colors[colors[ext]? and ext or '_default'][0] + name + reset
-extString  = (ext) -> colors[colors[ext]? and ext or '_default'][1] + '.' + ext + reset
-dirString  = (name, ext) -> 
+linkString = (file) ->
+    reset + colors['_link']['arrow'] + " ► " + colors['_link'][(file in stats.brokenLinks) and 'broken' or 'path'] + fs.readlinkSync(file)
+
+nameString = (name, ext) ->
+    key = if mediaTypes.has(ext) then "_media" else ext
+    " " + colors[colors[key]? and key or '_default'][0] + name + reset
+
+extString = (ext) ->
+    key = if mediaTypes.has(ext) then "_media" else ext
+    colors[colors[key]? and key or '_default'][1] + '.' + ext + reset
+
+dirString = (name, ext) -> 
     c = name and '_dir' or '_.dir'
     name = '📂 ' + name if args.icons
     colors[c][0] + (name and (" " + name) or "") + (if ext then colors[c][1] + '.' + colors[c][2] + ext else "") + " "
@@ -334,7 +344,7 @@ listFiles = (p, files) ->
             ownerColor = colors['_users']['default'] unless ownerColor
             groupColor = colors['_groups'][grp]
             groupColor = colors['_groups']['default'] unless groupColor
-            s = " " 
+            s = "" 
             if args.rights
                 s += rightsString stat, ownerColor, groupColor
                 s += " "                
@@ -462,11 +472,10 @@ if filestats.length > 0
 for p in pathstats.filter( (f) -> f.length and f[1].isDirectory() )
     listDir p[0]
     
-log ""
 if args.stats
     sprintf = require("sprintf-js").sprintf
     log BW(1) + " " +
-    fw(8) + stats.num_dirs + (stats.hidden_dirs and fw(4) + "+" + fw(5) + (stats.hidden_dirs) or "") + fw(4) + " dirs " + 
-    fw(8) + stats.num_files + (stats.hidden_files and fw(4) + "+" + fw(5) + (stats.hidden_files) or "") + fw(4) + " files " + 
-    fw(8) + sprintf("%2.1f", prof('end', 'ls')) + fw(4) + " ms" + " " +
+    fw(15) + stats.num_dirs + (stats.hidden_dirs and fw(10) + "+" + fw(12) + (stats.hidden_dirs) or "") + fw(10) + " dirs " + 
+    fw(15) + stats.num_files + (stats.hidden_files and fw(10) + "+" + fw(12) + (stats.hidden_files) or "") + fw(10) + " files " + 
+    fw(15) + sprintf("%2.1f", prof('end', 'ls')) + fw(10) + " ms" + " " +
     reset   
