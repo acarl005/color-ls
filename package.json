@@ -13,6 +13,7 @@
     "url": "git://github.com/acarl005/color-ls"
   },
   "scripts": {
+    "prepublish": "npm run build",
     "build": "coffee -o dest/ -c src/*.coffee",
     "test": "npm run build && bin/ls-color -laiI"
   },
