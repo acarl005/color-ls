@@ -80,7 +80,7 @@ color-ls
     size          . ? sort by size                    . = false 
     time          . ? sort by time                    . = false 
     kind          . ? sort by kind                    . = false 
-    pretty        . ? pretty size and date            . = false         
+    pretty        . ? pretty size and date            . = true
     stats         . ? show statistics                 . = false . - i
     icons         . ? show icons before folders       . = false . - I
     recurse       . ? recurse into subdirs            . = false . - R
