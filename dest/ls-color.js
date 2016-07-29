@@ -130,18 +130,10 @@
     '_header': [bold + BW(2) + fg(3, 2, 0), fw(4), bold + BW(2) + fg(5, 5, 0)],
     '_media': [fgc(141), fgc(54)],
     '_size': {
-      b: [fg(0, 0, 2)],
-      kB: [fg(0, 0, 4), fg(0, 0, 2)],
-      MB: [fg(1, 1, 5), fg(0, 0, 3)],
-      GB: [],
-      TB: [fg(4, 4, 5), fg(2, 2, 5)]
-    },
-    '_size': {
-      b: fg(0, 0, 5),
-      kB: fg(1, 1, 5),
-      MB: fg(2, 2, 5),
-      GB: fg(3, 3, 5),
-      TB: fg(4, 4, 5)
+      b: fgc(20),
+      kB: fgc(33),
+      MB: fgc(81),
+      GB: fgc(123)
     },
     '_users': {
       root: fg(5, 0, 2),
@@ -215,17 +207,11 @@
       } else {
         return sizes['MB'] + _s.lpad(stat.size, 10) + " ";
       }
-    } else if (stat.size < 100000000000) {
+    } else {
       if (args.pretty) {
         return sizes['GB'] + _s.lpad((stat.size / 1000000000).toFixed(1), 7) + "GB ";
       } else {
         return sizes['GB'] + _s.lpad(stat.size, 10) + " ";
-      }
-    } else {
-      if (args.pretty) {
-        return sizes['TB'] + _s.lpad((stat.size / 1000000000000).toFixed(3), 7) + "TB ";
-      } else {
-        return sizes['TB'] + _s.lpad(stat.size, 10) + " ";
       }
     }
   };
