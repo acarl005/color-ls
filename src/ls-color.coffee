@@ -127,6 +127,7 @@ colors =
     'markdown': [      fgc(87),   fgc(73) ]
     'html':     [      fgc(87),   fgc(73) ]
     'css':      [      fgc(219),  fgc(207) ]
+    'scss':     [      fgc(219),  fgc(207) ]
     'tar':      [      fg(5,0,0), fg(3,0,0) ] 
     'gz':       [      fg(5,0,0), fg(3,0,0) ] 
     'zip':      [      fg(5,0,0), fg(3,0,0) ] 
