@@ -15,7 +15,7 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "coffee -o dest/ -c src/*.coffee",
-    "test": "npm run build && bin/ls-color -laiI"
+    "test": "npm run build && bin/ls-color -laiIk"
   },
   "preferGlobal": true,
   "keywords": [
@@ -32,7 +32,6 @@
   "dependencies": {
     "ansi-256-colors": "^1.1.0",
     "lodash": "^4.1.0",
-    "moment": "^2.11.1",
     "sprintf-js": "^1.0.3",
     "underscore.string": "^3.2.3",
     "userid": "^0.2.0",

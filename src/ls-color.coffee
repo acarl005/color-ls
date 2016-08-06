@@ -7,11 +7,10 @@
 ansi   = require 'ansi-256-colors'
 fs     = require 'fs'
 path   = require 'path'
-util   = require 'util'
 _s     = require 'underscore.string'
 _      = require 'lodash'
-moment = require 'moment'
 log    = console.log
+months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 # 00000000   00000000    0000000   00000000
 # 000   000  000   000  000   000  000     
@@ -202,13 +201,13 @@ sizeString = (stat) ->
             sizes['GB'] + _s.lpad(stat.size, 10) + " "
     
 timeString = (stat) -> 
-    t = moment(stat.mtime) 
-    fw(20) + (if args.pretty then _s.lpad(t.format("D"),2) else t.format("DD")) + fw(7) + '.' + 
-    (if args.pretty then fw(15) + t.format("MMM") + fw(7)+"'" else fw(15) + t.format("MM") + fw(7)+"'") +
-    fw(10) + t.format("YY") + " " +
-    fw(20) + t.format("HH") + col = fw(7)+':' + 
-    fw(15) + t.format("mm") + col = fw(7)+':' +
-    fw(10) + t.format("ss") + " "
+    d = new Date(stat.mtime)
+    fw(20) + (if args.pretty then _s.lpad(d.getDate(), 2) else _s.lpad(d.getDate(), 2, '0')) + fw(7) + '.' + 
+    (if args.pretty then fw(15) + months[d.getMonth()] + fw(7) + "'" else fw(15) + _s.lpad(d.getMonth() + 1, 2, '0') + fw(7)+"'") +
+    fw(10) + d.getFullYear().toString().slice(-2) + " " +
+    fw(20) + _s.lpad(d.getHours(), 2, '0') + col = fw(7) + ':' + 
+    fw(15) + _s.lpad(d.getMinutes(), 2, '0') + col = fw(7)+':' +
+    fw(10) + _s.lpad(d.getSeconds(), 2, '0') + " "
     
 ownerName = (stat) -> 
     try
@@ -254,9 +253,10 @@ sort = (list, stats, exts=[]) ->
             if a[3] > b[3] then return 1 
             if a[3] < b[3] then return -1
             if args.time
-                m = moment(a[1].mtime)
-                if m.isAfter(b[1].mtime) then return 1
-                if m.isBefore(b[1].mtime) then return -1
+                d1 = new Date(a[1].mtime)
+                d2 = new Date(b[1].mtime)
+                if d1 > d2 then return 1
+                if d1 < d2 then return -1
             if args.size
                 if a[1].size > b[1].size then return 1
                 if a[1].size < b[1].size then return -1
@@ -264,9 +264,10 @@ sort = (list, stats, exts=[]) ->
             -1)
     else if args.time
         l.sort((a,b) -> 
-            m = moment(a[1].mtime)
-            if m.isAfter(b[1].mtime) then return 1
-            if m.isBefore(b[1].mtime) then return -1
+            d1 = new Date(a[1].mtime)
+            d2 = new Date(b[1].mtime)
+            if d1 > d2 then return 1
+            if d1 < d2 then return -1
             if args.size
                 if a[1].size > b[1].size then return 1
                 if a[1].size < b[1].size then return -1
