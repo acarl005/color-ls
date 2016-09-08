@@ -8,6 +8,7 @@ ansi   = require 'ansi-256-colors'
 fs     = require 'fs'
 path   = require 'path'
 _s     = require 'underscore.string'
+_      = require 'lodash'
 log    = console.log
 months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -249,11 +250,7 @@ rightsString = (stat, ownerColor, groupColor) ->
 # 0000000    0000000   000   000     000
 
 sort = (list, stats, exts=[]) ->
-    l = []
-    i = 0
-    while (i < list.length)
-      l.push([list[i], stats[i], i, exts.length > 0 and exts[i] or i])
-      i++
+    l = _.zip list, stats, [0...list.length], (exts.length > 0 and exts or [0...list.length])
     if args.kind
         if exts == [] then return list
         l.sort((a,b) ->
@@ -286,10 +283,7 @@ sort = (list, stats, exts=[]) ->
             if a[1].size < b[1].size then return -1
             if a[2] > b[2] then return 1
             -1)
-    result = []
-    l.forEach (item) ->
-      result.push(item[0])
-    result
+    _.unzip(l)[0]
 
 # 00000000  000  000      00000000   0000000
 # 000       000  000      000       000
