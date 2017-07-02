@@ -22,8 +22,8 @@ start = 0
 token = {}
 
 since = (t) ->
-  diff = process.hrtime token[t]
-  diff[0] * 1000 + diff[1] / 1000000
+    diff = process.hrtime token[t]
+    diff[0] * 1000 + diff[1] / 1000000
 
 prof = () ->
     if arguments.length == 2
@@ -422,7 +422,7 @@ listDir = (p) ->
     if args.find and not files.length
         true
     else if args.paths.length == 1 and args.paths[0] == '.' and not args.recurse
-        log reset
+        #log reset
     else
         s = colors['_arrow'] + "►" + colors['_header'][0] + " "
         ps = path.resolve(ps) if ps[0] != '~'
@@ -460,7 +460,7 @@ listDir = (p) ->
 
 pathstats = args.paths.map (f) ->
     try
-         [f, fs.statSync(f)]
+        [f, fs.statSync(f)]
     catch error
         log_error 'no such file: ', f
         []

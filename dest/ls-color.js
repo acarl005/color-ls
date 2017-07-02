@@ -536,7 +536,7 @@
     if (args.find && !files.length) {
       true;
     } else if (args.paths.length === 1 && args.paths[0] === '.' && !args.recurse) {
-      log(reset);
+
     } else {
       s = colors['_arrow'] + "►" + colors['_header'][0] + " ";
       if (ps[0] !== '~') {
