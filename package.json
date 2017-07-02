@@ -1,6 +1,6 @@
 {
   "name": "ls-color",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "More colorful alternative to the ls command.",
   "main": "ls-color.coffee",
   "author": "Andrew Carlson <acarl005@g.ucla.edu>",
@@ -31,9 +31,9 @@
   ],
   "dependencies": {
     "ansi-256-colors": "^1.1.0",
+    "karg": ">=0.3.1",
     "sprintf-js": "^1.0.3",
     "underscore.string": "^3.2.3",
-    "userid": "^0.2.0",
-    "karg": ">=0.3.1"
+    "userid": "^0.3.1"
   }
 }
