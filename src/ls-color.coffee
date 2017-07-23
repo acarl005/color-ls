@@ -144,7 +144,7 @@ colors =
     '_groups':  { wheel: fg(3,0,0), staff: fg(0,2,0), admin: fg(2,2,0), default: fg(2,0,2) }
     '_error':   [ bold+BG(5,0,0)+fg(5,5,0), bold+BG(5,0,0)+fg(5,5,5) ]
 
-mediaTypes = new Set ['png', 'gif', 'jpg', 'jpeg', 'ico', 'svg', 'webp', 'tiff', 'pxm', 'mp3', 'm4a', 'wav', 'webm', 'avi', 'wmv']
+mediaTypes = new Set ['png', 'gif', 'jpg', 'jpeg', 'ico', 'svg', 'webp', 'tiff', 'pxm', 'mp3', 'm4a', 'wav', 'webm', 'avi', 'wmv', 'mk4', 'mp4', 'flv', 'mov']
 
 try
     username = require('userid').username(process.getuid())
