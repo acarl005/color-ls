@@ -3,6 +3,7 @@
 #### A colorful alternative to the `ls` command.
 List the contents of your folders in beautiful, semantic colors.
 ```
+$ npm install -g ls-color
 $ ls-color -aliI
 ```
 ![example01](./img/main.png)
